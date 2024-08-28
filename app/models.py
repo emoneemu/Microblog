@@ -18,6 +18,9 @@ from flask_login import UserMixin
 #For user loader
 from app import login
 
+#generate avatar for user
+from hashlib import md5
+
 #user table class,here UserMixin is for login credential
 class User(UserMixin,db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
@@ -29,12 +32,19 @@ class User(UserMixin,db.Model):
 
     posts: so.WriteOnlyMapped['Post'] = so.relationship(
         back_populates='author')
+    about_me: so.Mapped[Optional[str]] = so.mapped_column(sa.String(140))
+    last_seen: so.Mapped[Optional[datetime]] = so.mapped_column(
+        default=lambda: datetime.now(timezone.utc))
 
     def set_password(self,password):
         self.password_hash = generate_password_hash(password)
     
     def check_password(self,password):
         return check_password_hash(self.password_hash,password)
+
+    def avatar(self,size):
+        digest=md5(self.email.lower().encode('utf-8')).hexdigest()
+        return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -55,7 +65,7 @@ class Post(db.Model):
     
 
 
-#Needs a user loader function , because flask-login knows nothing about db. Because Flask-Login knows nothing about databases, 
+#Needs a user loader function. Because Flask-Login knows nothing about databases, 
 #it needs the application's help in loading a user. For that reason, the extension expects that the application will configure
 # a user loader function, that can be called to load a user given the ID.
 
