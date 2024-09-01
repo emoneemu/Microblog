@@ -1,6 +1,7 @@
 from flask import Flask
 from config import Config
 
+app = Flask(__name__)
 #error handling
 #from app import routes,models,errors
 
@@ -11,7 +12,7 @@ from flask_migrate import Migrate
 #Login state management
 from flask_login import LoginManager
 
-app = Flask(__name__)
+
 app.config.from_object(Config)
 
 #db-part
