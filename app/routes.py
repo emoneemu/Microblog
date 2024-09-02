@@ -4,8 +4,8 @@ from app import app,db
 #handle split url
 from flask import request
 from urllib.parse import urlsplit
-#handle forms
-from app.forms import LoginForm
+#handle forms,handle follow-unfollow option from an empty form
+from app.forms import LoginForm,EmptyForm
 
 #handle db
 import sqlalchemy as sa;
@@ -23,23 +23,57 @@ from datetime import datetime,timezone
 #Handle edit profile view
 from app.forms import EditProfileForm
 
-@app.route('/')
-@app.route('/index')
+#Handle dynamic post
+from app.models import Post
+from app.forms import PostForm
+
+
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.now(timezone.utc)
+        db.session.commit()
+    #pass
+    #if current_user.is_authenticated:
+        # Update the last_seen time to the current time on any request
+     #   current_user.last_seen = datetime.now(timezone.utc)
+      #  db.session.commit()
+
+@app.route('/', methods=['GET','POST'])
+@app.route('/index',methods=['GET','POST'])
 @login_required
 def index():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(body=form.post.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post is now live!')
+        return redirect(url_for('index'))
     #return "Hello, World!"
     #user = {'username': 'Miguel'}
-    posts = [
-        {
-            'author': {'username': 'John'},
-           'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html',title='Home Page',posts=posts)
+    #posts = [
+    #    {
+    #        'author': {'username': 'John'},
+    #       'body': 'Beautiful day in Portland!'
+    #    },
+    #    {
+    #        'author': {'username': 'Susan'},
+    #        'body': 'The Avengers movie was so cool!'
+    #    }
+    #]
+    #posts = db.session.scalars(current_user.following_posts()).all()
+
+    page = request.args.get('page', 1, type=int)
+    posts = db.paginate(current_user.following_posts(), page=page,
+                        per_page=app.config['POSTS_PER_PAGE'], error_out=False)
+    next_url = url_for('index', page=posts.next_num) \
+        if posts.has_next else None
+    prev_url = url_for('index', page=posts.prev_num) \
+        if posts.has_prev else None
+
+    return render_template('index.html',title='Home Page',posts=posts.items,form=form ,next_url=next_url,
+                           prev_url=prev_url)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -82,23 +116,21 @@ def login():
 @login_required
 def user(username):
     user = db.first_or_404(sa.select(User).where(User.username==username))
-    posts=[
-        {'author':user,'body':'test post #1'},
-        {'author':user,'body':'test post #2'}
-    ]
-    return render_template('user.html',user=user,posts=posts)
-
-
-@app.before_request
-def before_request():
-    #if current_user.is_authenticated:
-     #   current_user.last_seen = datetime.now(timezone.utc)
-      #  db.session.commit()
-    pass
-    #if current_user.is_authenticated:
-        # Update the last_seen time to the current time on any request
-     #   current_user.last_seen = datetime.now(timezone.utc)
-      #  db.session.commit()
+    #posts=[
+    #    {'author':user,'body':'test post #1'},
+    #    {'author':user,'body':'test post #2'}
+    #]
+    page = request.args.get('page', 1, type=int)
+    query = user.posts.select().order_by(Post.timestamp.desc())
+    posts = db.paginate(query, page=page,
+                        per_page=app.config['POSTS_PER_PAGE'],
+                        error_out=False)
+    next_url = url_for('user', username=user.username, page=posts.next_num) \
+        if posts.has_next else None
+    prev_url = url_for('user', username=user.username, page=posts.prev_num) \
+        if posts.has_prev else None
+    form=EmptyForm()
+    return render_template('user.html',user=user,posts=posts.items,next_url=next_url, prev_url=prev_url,form=form)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -118,9 +150,59 @@ def edit_profile():
                            form=form)
 
 
+
+#Route for follow and unfollow
+from app.forms import EmptyForm
+
+@app.route('/follow/<username>', methods=['POST'])
+@login_required
+def follow(username):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        user = db.session.scalar(
+            sa.select(User).where(User.username == username))
+        if user is None:
+            flash(f'User {username} not found.')
+            return redirect(url_for('index'))
+        if user == current_user:
+            flash('You cannot follow yourself!')
+            return redirect(url_for('user', username=username))
+        current_user.follow(user)
+        db.session.commit()
+        flash(f'You are following {username}!')
+        return redirect(url_for('user', username=username))
+    else:
+        return redirect(url_for('index'))
+
+
+@app.route('/unfollow/<username>', methods=['POST'])
+@login_required
+def unfollow(username):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        user = db.session.scalar(
+            sa.select(User).where(User.username == username))
+        if user is None:
+            flash(f'User {username} not found.')
+            return redirect(url_for('index'))
+        if user == current_user:
+            flash('You cannot unfollow yourself!')
+            return redirect(url_for('user', username=username))
+        current_user.unfollow(user)
+        db.session.commit()
+        flash(f'You are not following {username}.')
+        return redirect(url_for('user', username=username))
+    else:
+        return redirect(url_for('index'))
+
+
 @app.route('/logout')
 def logout():
-    if current_user.is_authenticated:
+    logout_user()
+    return redirect(url_for('index'))
+
+"""
+if current_user.is_authenticated:
         now = datetime.now(timezone.utc)
         hour_str = now.strftime("%H")  # Extract hour as string
         minute_str = now.strftime("%M")  # Extract minute as string
@@ -138,5 +220,22 @@ def logout():
         # Update the user's last seen time
         current_user.last_seen = new_datetime
         db.session.commit()
-    logout_user()
-    return redirect(url_for('index'))
+"""
+
+
+#Explore view
+@app.route('/explore')
+@login_required
+def explore():
+    page = request.args.get('page', 1, type=int)
+    query = sa.select(Post).order_by(Post.timestamp.desc())
+    #implement traditonal all post in one query
+    #posts = db.session.scalars(query).all()
+    #Implement pagination
+    posts = db.paginate(query, page=page,
+                        per_page=app.config['POSTS_PER_PAGE'], error_out=False)
+    next_url = url_for('explore', page=posts.next_num) \
+        if posts.has_next else None
+    prev_url = url_for('explore', page=posts.prev_num) \
+        if posts.has_prev else None
+    return render_template('index.html', title='Explore', posts=posts.items,next_url=next_url, prev_url=prev_url)

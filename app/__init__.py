@@ -27,6 +27,9 @@ login.login_view = 'login'
 #Registering routes models errors etc python files
 from app import routes,models,errors
 
+#Handling or Logging a rotating file
+from logging.handlers import RotatingFileHandler
+import os
 
 #Log Errors by email
 import logging
@@ -47,15 +50,7 @@ if not app.debug:
             credentials=auth, secure=secure)
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
-
-from app import routes, models, errors
-
-
-#Handling or Logging a rotating file
-from logging.handlers import RotatingFileHandler
-import os
-
-if not app.debug:
+    
     if not os.path.exists('logs'):
         os.mkdir('logs')
     file_handler = RotatingFileHandler('logs/microblog.log', maxBytes=10240,
@@ -67,3 +62,5 @@ if not app.debug:
 
     app.logger.setLevel(logging.INFO)
     app.logger.info('Microblog startup')
+
+from app import routes, models, errors

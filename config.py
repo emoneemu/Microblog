@@ -10,6 +10,7 @@ class Config:
     MAIL_USERNAME = os.environ.get('emonfashion555@gmail.com')
     MAIL_PASSWORD = os.environ.get('016CHEss')
     ADMINS = ['md.sazid.al.emon@gmail.com']
+    POSTS_PER_PAGE = 25
 
 
 
