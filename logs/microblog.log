@@ -95,3 +95,4 @@ KeyError: 'POSTS_PER_PAGE'
 2024-09-02 13:39:51,468 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:64]
 2024-09-02 15:48:19,436 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
 2024-09-02 15:48:36,993 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
+2024-09-02 16:11:38,489 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
