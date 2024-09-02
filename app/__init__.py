@@ -1,6 +1,9 @@
 from flask import Flask
 from config import Config
 
+#Email support
+from flask_mail import Mail
+
 app = Flask(__name__)
 #error handling
 #from app import routes,models,errors
@@ -23,6 +26,8 @@ migrate = Migrate(app,db)
 login = LoginManager(app)
 login.login_view = 'login'
 
+#Mail support
+mail = Mail(app)
 
 #Registering routes models errors etc python files
 from app import routes,models,errors
