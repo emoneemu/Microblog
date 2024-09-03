@@ -25,7 +25,15 @@ import os
 import logging
 from logging.handlers import SMTPHandler
 
+#Language Translator using flask babel extension
+from flask import request
+from flask_babel import Babel,_,lazy_gettext as _l
 
+def get_locale():
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+
+#############################Base initialization#####################################
 app = Flask(__name__)
 #error handling
 #from app import routes,models,errors
@@ -35,6 +43,9 @@ moment = Moment(app)
 
 app.config.from_object(Config)
 
+#Language translator
+babel = Babel(app, locale_selector=get_locale)
+
 #db-part
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
@@ -42,6 +53,8 @@ migrate = Migrate(app,db)
 #Login-part
 login = LoginManager(app)
 login.login_view = 'login'
+#Language Translation
+login.login_message = _l('Please log in to access this page.')
 
 #Mail support
 mail = Mail(app)
