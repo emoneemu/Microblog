@@ -32,16 +32,14 @@ from app.forms import PostForm,ResetPasswordForm
 from app.forms import ResetPasswordRequestForm
 from app.email import send_password_reset_email
 
+#Route for follow and unfollow
+from app.forms import EmptyForm
+
 @app.before_request
 def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.now(timezone.utc)
         db.session.commit()
-    #pass
-    #if current_user.is_authenticated:
-        # Update the last_seen time to the current time on any request
-     #   current_user.last_seen = datetime.now(timezone.utc)
-      #  db.session.commit()
 
 @app.route('/', methods=['GET','POST'])
 @app.route('/index',methods=['GET','POST'])
@@ -54,20 +52,6 @@ def index():
         db.session.commit()
         flash('Your post is now live!')
         return redirect(url_for('index'))
-    #return "Hello, World!"
-    #user = {'username': 'Miguel'}
-    #posts = [
-    #    {
-    #        'author': {'username': 'John'},
-    #       'body': 'Beautiful day in Portland!'
-    #    },
-    #    {
-    #        'author': {'username': 'Susan'},
-    #        'body': 'The Avengers movie was so cool!'
-    #    }
-    #]
-    #posts = db.session.scalars(current_user.following_posts()).all()
-
     page = request.args.get('page', 1, type=int)
     posts = db.paginate(current_user.following_posts(), page=page,
                         per_page=app.config['POSTS_PER_PAGE'], error_out=False)
@@ -100,9 +84,6 @@ def login():
         return redirect(url_for('index'))
     form=LoginForm()
     if form.validate_on_submit():
-        #we no longer need the flash system as we integrated with db
-        #flash('Login requested for user {}, remember_me={}'.format(
-            #form.username.data, form.remember_me.data))
         user=db.session.scalar(
             sa.select(User).where(User.username ==form.username.data))
         if user is None or not user.check_password(form.password.data):
@@ -112,7 +93,6 @@ def login():
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc !='':
             next_page=url_for('index')
-        #return redirect(url_for('index'))
         return redirect(next_page)
     return render_template('login.html',title='Sign In',form=form)
 
@@ -120,10 +100,6 @@ def login():
 @login_required
 def user(username):
     user = db.first_or_404(sa.select(User).where(User.username==username))
-    #posts=[
-    #    {'author':user,'body':'test post #1'},
-    #    {'author':user,'body':'test post #2'}
-    #]
     page = request.args.get('page', 1, type=int)
     query = user.posts.select().order_by(Post.timestamp.desc())
     posts = db.paginate(query, page=page,
@@ -153,10 +129,6 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
 
-
-
-#Route for follow and unfollow
-from app.forms import EmptyForm
 
 @app.route('/follow/<username>', methods=['POST'])
 @login_required
@@ -205,27 +177,6 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-"""
-if current_user.is_authenticated:
-        now = datetime.now(timezone.utc)
-        hour_str = now.strftime("%H")  # Extract hour as string
-        minute_str = now.strftime("%M")  # Extract minute as string
-        second_str = now.strftime("%S")  # Extract second as string
-
-        # Convert the hour to an integer and add 6
-        new_hour = (int(hour_str) + 6) % 24  # Use modulo 24 to handle overflow
-
-        # Create the new time string
-        new_time_str = f"{new_hour:02}:{minute_str}:{second_str}"
-
-        # Combine with the current date
-        new_datetime = now.replace(hour=new_hour)
-
-        # Update the user's last seen time
-        current_user.last_seen = new_datetime
-        db.session.commit()
-"""
-
 
 #Explore view
 @app.route('/explore')
@@ -233,9 +184,6 @@ if current_user.is_authenticated:
 def explore():
     page = request.args.get('page', 1, type=int)
     query = sa.select(Post).order_by(Post.timestamp.desc())
-    #implement traditonal all post in one query
-    #posts = db.session.scalars(query).all()
-    #Implement pagination
     posts = db.paginate(query, page=page,
                         per_page=app.config['POSTS_PER_PAGE'], error_out=False)
     next_url = url_for('explore', page=posts.next_num) \

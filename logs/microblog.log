@@ -1,24 +1,4 @@
-2024-08-28 16:43:22,470 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:68]
-2024-08-29 13:33:43,626 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:68]
-2024-08-29 13:33:54,672 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:68]
-2024-08-29 15:38:57,708 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:68]
-2024-09-01 09:41:07,042 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:68]
-2024-09-01 09:46:39,554 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:68]
-2024-09-01 09:55:43,556 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:68]
-2024-09-01 09:55:56,059 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:68]
-2024-09-01 09:56:13,917 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:68]
-2024-09-01 10:03:36,710 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 10:03:44,205 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 10:05:05,569 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 10:14:19,735 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 10:25:26,822 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 10:34:21,504 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 12:49:53,415 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 14:23:28,392 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 15:12:29,096 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 15:12:55,286 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 15:13:10,953 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 15:13:29,322 ERROR: Exception on /index [GET] [in /home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/app.py:838]
+2024-09-02 16:58:20,828 ERROR: Exception on /explore [GET] [in /home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/app.py:838]
 Traceback (most recent call last):
   File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
     response = self.full_dispatch_request()
@@ -35,64 +15,25 @@ Traceback (most recent call last):
   File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask_login/utils.py", line 290, in decorated_view
     return current_app.ensure_sync(func)(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/sazid/blogproject/app/routes.py", line 57, in index
-    per_page=app.config['POSTS_PER_PAGE'], error_out=False)
-             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-KeyError: 'POSTS_PER_PAGE'
-2024-09-01 15:14:16,443 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 15:14:44,803 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 15:14:49,171 ERROR: Exception on /index [GET] [in /home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/app.py:838]
-Traceback (most recent call last):
-  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask_login/utils.py", line 290, in decorated_view
-    return current_app.ensure_sync(func)(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/sazid/blogproject/app/routes.py", line 57, in index
-    per_page=app.config['POSTS_PER_PAGE'], error_out=False)
-             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-KeyError: 'POSTS_PER_PAGE'
-2024-09-01 15:15:20,241 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 15:15:36,065 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 15:15:45,488 ERROR: Exception on /index [GET] [in /home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/app.py:838]
-Traceback (most recent call last):
-  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/app.py", line 1473, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/app.py", line 882, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/app.py", line 880, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/app.py", line 865, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask_login/utils.py", line 290, in decorated_view
-    return current_app.ensure_sync(func)(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/sazid/blogproject/app/routes.py", line 57, in index
-    per_page=app.config['POSTS_PER_PAGE'], error_out=False)
-             ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-KeyError: 'POSTS_PER_PAGE'
-2024-09-01 15:18:21,431 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 15:55:53,405 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-01 16:07:16,915 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-02 10:26:47,173 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-02 10:29:21,229 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-02 13:39:28,252 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:64]
-2024-09-02 13:39:39,970 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:64]
-2024-09-02 13:39:51,468 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:64]
-2024-09-02 15:48:19,436 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-02 15:48:36,993 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
-2024-09-02 16:11:38,489 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
+  File "/home/sazid/blogproject/app/routes.py", line 245, in explore
+    return render_template('index.html', title='Explore', posts=posts.items,next_url=next_url, prev_url=prev_url)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/jinja2/environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/jinja2/environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/sazid/blogproject/app/templates/index.html", line 40, in top-level template code
+    {% for error in form.post.errors %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sazid/blogproject/myenv/lib/python3.12/site-packages/jinja2/environment.py", line 487, in getattr
+    return getattr(obj, attribute)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'form' is undefined
+2024-09-03 08:39:13,714 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]
+2024-09-03 08:49:06,757 INFO: Microblog startup [in /home/sazid/blogproject/app/__init__.py:69]

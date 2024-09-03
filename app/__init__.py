@@ -1,12 +1,11 @@
 from flask import Flask
 from config import Config
 
+#UTC time support
+from flask_moment import Moment
+
 #Email support
 from flask_mail import Mail
-
-app = Flask(__name__)
-#error handling
-#from app import routes,models,errors
 
 #db state management
 from flask_sqlalchemy import SQLAlchemy
@@ -15,6 +14,24 @@ from flask_migrate import Migrate
 #Login state management
 from flask_login import LoginManager
 
+#Registering routes models errors etc python files
+from app import routes,models,errors
+
+#Handling or Logging a rotating file
+from logging.handlers import RotatingFileHandler
+import os
+
+#Log Errors by email
+import logging
+from logging.handlers import SMTPHandler
+
+
+app = Flask(__name__)
+#error handling
+#from app import routes,models,errors
+
+#UTC time support
+moment = Moment(app)
 
 app.config.from_object(Config)
 
@@ -28,17 +45,6 @@ login.login_view = 'login'
 
 #Mail support
 mail = Mail(app)
-
-#Registering routes models errors etc python files
-from app import routes,models,errors
-
-#Handling or Logging a rotating file
-from logging.handlers import RotatingFileHandler
-import os
-
-#Log Errors by email
-import logging
-from logging.handlers import SMTPHandler
 
 if not app.debug:
     if app.config['MAIL_SERVER']:
