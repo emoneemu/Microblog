@@ -14,8 +14,6 @@ from flask_migrate import Migrate
 #Login state management
 from flask_login import LoginManager
 
-#Registering routes models errors etc python files
-from app import routes,models,errors
 
 #Handling or Logging a rotating file
 from logging.handlers import RotatingFileHandler
@@ -87,4 +85,5 @@ if not app.debug:
     app.logger.setLevel(logging.INFO)
     app.logger.info('Microblog startup')
 
-from app import routes, models, errors
+#Registering routes models errors etc python files
+from app import routes,models,errors
