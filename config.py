@@ -13,28 +13,3 @@ class Config:
     POSTS_PER_PAGE = 25
     LANGUAGES = ['en', 'es']
     MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
-
-
-
-
-
-#Package           Version
-#----------------- -------
-#alembic           1.13.2
-#blinker           1.8.2
-#click             8.1.7
-#####Flask             3.0.3
-#####Flask-Migrate     4.0.7
-#####Flask-SQLAlchemy  3.1.1
-#####Flask-WTF         1.2.1
-#greenlet          3.0.3
-#itsdangerous      2.2.0
-#Jinja2            3.1.4
-#Mako              1.3.5
-#MarkupSafe        2.1.5
-#pip               24.2
-#####python-dotenv     1.0.1
-#####SQLAlchemy        2.0.32
-#typing_extensions 4.12.2
-#Werkzeug          3.0.4
-#####WTForms           3.1.2
