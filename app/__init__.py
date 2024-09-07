@@ -27,6 +27,8 @@ from logging.handlers import SMTPHandler
 from flask import request
 from flask_babel import Babel,_,lazy_gettext as _l
 
+
+
 def get_locale():
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
@@ -35,6 +37,13 @@ def get_locale():
 app = Flask(__name__)
 #error handling
 #from app import routes,models,errors
+
+#error handle
+from app.errors import bp as errors_bp
+app.register_blueprint(errors_bp)
+
+from app.auth import bp as auth_bp
+app.register_blueprint(auth_bp, url_prefix='/auth')
 
 #UTC time support
 moment = Moment(app)
@@ -86,4 +95,4 @@ if not app.debug:
     app.logger.info('Microblog startup')
 
 #Registering routes models errors etc python files
-from app import routes,models,errors
+from app import routes,models

@@ -45,40 +45,40 @@ class RegistrationForm(FlaskForm):
 
 
 
-class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+# class LoginForm(FlaskForm):
+#     username = StringField('Username', validators=[DataRequired()])
+#     password = PasswordField('Password', validators=[DataRequired()])
+#     remember_me = BooleanField('Remember Me')
+#     submit = SubmitField('Sign In')
 
 
 #Edit Profile form
-class EditProfileForm(FlaskForm):
-    username = StringField(_l('Username'), validators=[DataRequired()])
-    about_me = TextAreaField(_l('About me'), validators=[Length(min=0, max=140)])
-    submit = SubmitField(_l('Submit'))
+# class EditProfileForm(FlaskForm):
+#     username = StringField(_l('Username'), validators=[DataRequired()])
+#     about_me = TextAreaField(_l('About me'), validators=[Length(min=0, max=140)])
+#     submit = SubmitField(_l('Submit'))
 
     
-    def __init__(self, original_username, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.original_username = original_username
+#     def __init__(self, original_username, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.original_username = original_username
 
-    def validate_username(self, username):
-        if username.data != self.original_username:
-            user = db.session.scalar(sa.select(User).where(
-                User.username == username.data))
-            if user is not None:
-                raise ValidationError(_l('Please use a different username.'))
+#     def validate_username(self, username):
+#         if username.data != self.original_username:
+#             user = db.session.scalar(sa.select(User).where(
+#                 User.username == username.data))
+#             if user is not None:
+#                 raise ValidationError(_l('Please use a different username.'))
             
-#Empty form for following and unfollowing.
-class EmptyForm(FlaskForm):
-    submit = SubmitField('Submit')
+# #Empty form for following and unfollowing.
+# class EmptyForm(FlaskForm):
+#     submit = SubmitField('Submit')
 
 
-class PostForm(FlaskForm):
-    post = TextAreaField(_l('Say something'), validators=[
-        DataRequired(), Length(min=1, max=140)])
-    submit = SubmitField(_l('Submit'))
+# class PostForm(FlaskForm):
+#     post = TextAreaField(_l('Say something'), validators=[
+#         DataRequired(), Length(min=1, max=140)])
+#     submit = SubmitField(_l('Submit'))
 
 
 class ResetPasswordRequestForm(FlaskForm):
