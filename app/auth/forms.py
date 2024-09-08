@@ -1,19 +1,20 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired
-
 #Lazy evaluation of a language
 from flask_babel import _,lazy_gettext as _l
-
+from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms.validators import DataRequired,ValidationError,Email,EqualTo
 #For Handle registaration FORM
 import sqlalchemy as sa
 from app import db
 from app.models import User
-from wtforms.validators import ValidationError,Email,EqualTo
+
+
+
+#from wtforms.validators import ValidationError,Email,EqualTo
 
 #Handle Edit profile
-from wtforms import TextAreaField
-from wtforms.validators import Length
+#from wtforms import TextAreaField
+#from wtforms.validators import Length
 
 
 #Login form with Translator implementation

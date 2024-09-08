@@ -1,29 +1,30 @@
+#for post
+from datetime import datetime,timezone
+#generate avatar for user
+from hashlib import md5
+#Forget password Handle
+from time import time
 #for user table
 from typing import Optional
-
-#for password hasing method implement
-from werkzeug.security import generate_password_hash,check_password_hash
-
 #for db, import app to forget password handle
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from app import app,db
-
-#for post
-from datetime import datetime,timezone
-
+from flask import current_app
 #For login credential Using Mixin generic class
 from flask_login import UserMixin
-
-#For user loader
-from app import login
-
-#generate avatar for user
-from hashlib import md5
-
-#Forget password Handle
-from time import time
+#for password hasing method implement
+from werkzeug.security import generate_password_hash,check_password_hash
 import jwt
+#For user loader
+from app import db,login
+
+
+#from app import app,db
+
+
+
+
+
 
 #Followers Association table . 
 followers = sa.Table(
@@ -59,6 +60,9 @@ class User(UserMixin,db.Model):
         secondary=followers, primaryjoin=(followers.c.followed_id == id),
         secondaryjoin=(followers.c.follower_id == id),
         back_populates='following')
+    
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
 
 
     def set_password(self,password):
@@ -70,9 +74,6 @@ class User(UserMixin,db.Model):
     def avatar(self,size):
         digest=md5(self.email.lower().encode('utf-8')).hexdigest()
         return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
-
-    def __repr__(self):
-        return '<User {}>'.format(self.username)
     
     def follow(self, user):
         if not self.is_following(user):
@@ -114,17 +115,20 @@ class User(UserMixin,db.Model):
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
             {'reset_password': self.id, 'exp': time() + expires_in},
-            app.config['SECRET_KEY'], algorithm='HS256')
+            current_app.config['SECRET_KEY'], algorithm='HS256')
 
     @staticmethod
     def verify_reset_password_token(token):
         try:
-            id = jwt.decode(token, app.config['SECRET_KEY'],
+            id = jwt.decode(token, current_app.config['SECRET_KEY'],
                             algorithms=['HS256'])['reset_password']
-        except:
+        except Exception:
             return
         return db.session.get(User, id)
 
+@login.user_loader
+def load_user(id):
+    return db.session.get(User, int(id))
 
 #blog post table class
 class Post(db.Model):
@@ -148,6 +152,6 @@ class Post(db.Model):
 #it needs the application's help in loading a user. For that reason, the extension expects that the application will configure
 # a user loader function, that can be called to load a user given the ID.
 
-@login.user_loader
-def load_user(id):
-    return db.session.get(User, int(id))
+# @login.user_loader
+# def load_user(id):
+#     return db.session.get(User, int(id))
