@@ -2,8 +2,6 @@ import os
 import click
 from flask import Blueprint
 
-#from app import app
-
 bp = Blueprint('cli', __name__, cli_group=None)
 
 

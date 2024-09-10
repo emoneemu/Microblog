@@ -1,72 +1,31 @@
-from flask import Flask
-from config import Config
-
-#UTC time support
-from flask_moment import Moment
-
-#Email support
-from flask_mail import Mail
-
-#db state management
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-
-#Login state management
-from flask_login import LoginManager
-
-
-#Handling or Logging a rotating file
+import logging
 from logging.handlers import RotatingFileHandler,SMTPHandler
 import os
+from flask import Flask,request,current_app
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_login import LoginManager
+from flask_mail import Mail
+from flask_moment import Moment
+from flask_babel import Babel,lazy_gettext as _l
+from config import Config
 
-#Log Errors by email
-import logging
-from logging.handlers import SMTPHandler
-
-#Language Translator using flask babel extension
-from flask import request
-from flask_babel import Babel,_,lazy_gettext as _l
-
-
-#Current app
-from flask import current_app
 
 def get_locale():
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
+    return request.accept_languages.best_match(current_app.config['LANGUAGES'])
 
 
-#############################Base initialization#####################################
-app = Flask(__name__)
-#error handling
-#from app import routes,models,errors
 
-#error handle
-from app.errors import bp as errors_bp
-app.register_blueprint(errors_bp)
-
-from app.auth import bp as auth_bp
-app.register_blueprint(auth_bp, url_prefix='/auth')
-
-#UTC time support
-moment = Moment()
-
-app.config.from_object(Config)
-
-#Language translator
-babel = Babel()
-
-#db-part
 db = SQLAlchemy()
 migrate = Migrate()
-
-#Login-part
 login = LoginManager()
 login.login_view = 'auth.login'
-#Language Translation
 login.login_message = _l('Please log in to access this page.')
-
-#Mail support
 mail = Mail()
+moment = Moment()
+babel = Babel()
+
+
 
 
 def create_app(config_class=Config):
@@ -122,5 +81,4 @@ def create_app(config_class=Config):
     return app
 
 
-#Registering routes models errors etc python files
 from app import models

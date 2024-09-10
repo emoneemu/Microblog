@@ -1,32 +1,17 @@
-#for post
+
 from datetime import datetime,timezone
-#generate avatar for user
 from hashlib import md5
-#Forget password Handle
 from time import time
-#for user table
 from typing import Optional
-#for db, import app to forget password handle
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from flask import current_app
-#For login credential Using Mixin generic class
 from flask_login import UserMixin
-#for password hasing method implement
 from werkzeug.security import generate_password_hash,check_password_hash
 import jwt
-#For user loader
 from app import db,login
 
 
-#from app import app,db
-
-
-
-
-
-
-#Followers Association table . 
 followers = sa.Table(
     'followers',
     db.metadata,
@@ -36,7 +21,7 @@ followers = sa.Table(
               primary_key=True)
 )
 
-#user table class,here UserMixin is for login credential
+
 class User(UserMixin,db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True,
@@ -130,7 +115,7 @@ class User(UserMixin,db.Model):
 def load_user(id):
     return db.session.get(User, int(id))
 
-#blog post table class
+
 class Post(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     body: so.Mapped[str] = so.mapped_column(sa.String(140))
@@ -145,13 +130,3 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
-    
-
-
-#Needs a user loader function. Because Flask-Login knows nothing about databases, 
-#it needs the application's help in loading a user. For that reason, the extension expects that the application will configure
-# a user loader function, that can be called to load a user given the ID.
-
-# @login.user_loader
-# def load_user(id):
-#     return db.session.get(User, int(id))
