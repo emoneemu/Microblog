@@ -331,9 +331,66 @@
 
 
 
-=====LOGIN ID====
+#=====LOGIN ID====
 
 itachi
 sazid
 tamanna
 sojib
+emon
+
+## LOL
+
+(venv) root@tb:~/Microblog# ls -a
+.  ..  .env  .flaskenv  .git  .gitattributes  .gitignore  .idea  __pycache__  app  babel.cfg  blogproject.py  certs  config.py  irrelevent.txt  logs  migrations  requirements.txt  tests.py  venv
+
+
+GIT ignore:
+
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+venv/
+app.db
+microblog.log*
+
+#ssl
+certs/
+
+#Environment variable
+.env
+.flaskenv
